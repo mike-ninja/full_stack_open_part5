@@ -119,6 +119,10 @@ const App = () => {
     )
   }
 
+  const removedBlog = (id) => {
+    setBlogs(blogs.filter(blog => blog.id !== id))
+  }
+
   const sortedArray = blogs.sort((a, b) => a.likes - b.likes)
 
   return (
@@ -134,7 +138,7 @@ const App = () => {
       </div>
       {blogForm()}
       {sortedArray.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateState={removedBlog} loggedUser={user}/>
       )}
     </div>
   )
