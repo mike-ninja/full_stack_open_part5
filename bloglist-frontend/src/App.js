@@ -18,10 +18,9 @@ const App = () => {
   const [user, setUser] = useState(null)
   const blogFormRef = useRef()
 
-  useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
+  useEffect( async () => {
+    const blogs = await blogService.getAll()
+    setBlogs( blogs )
   }, [])
 
   useEffect(() => {
@@ -44,7 +43,7 @@ const App = () => {
       window.localStorage.setItem(
         'loggedBlogAppUser', JSON.stringify(user)
       )
-      blogService.setToken(user.token) // this doesnt do anything yet
+      blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')

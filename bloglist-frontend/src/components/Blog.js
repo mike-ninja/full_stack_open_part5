@@ -7,8 +7,6 @@ const Blog = ({ blog, updateState, loggedUser }) => {
 
   const hideWhenVisible = { display: view ? 'none' : '' }
   const showWhenVisible = { display: view ? '' : 'none' }
-  console.log(loggedUser)
-  console.log(blog.user)
   const showRemoveButton = { display: loggedUser.name === blog.user.name ? '' : 'none' }
 
   const toggleView = () => {
