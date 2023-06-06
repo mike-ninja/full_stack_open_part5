@@ -21,7 +21,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -98,6 +98,7 @@ const App = () => {
   const addBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
     const addedBlog = await blogService.create(blogObject)
+    console.log(addedBlog)
     setBlogs(blogs.concat(addedBlog)) 
   }
 
@@ -118,6 +119,8 @@ const App = () => {
     )
   }
 
+  const sortedArray = blogs.sort((a, b) => a.likes - b.likes)
+
   return (
     <div>
       <h2>blogs</h2>
@@ -130,7 +133,7 @@ const App = () => {
         <button onClick={handleLogout}>Logout</button>
       </div>
       {blogForm()}
-      {blogs.map(blog =>
+      {sortedArray.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
     </div>
