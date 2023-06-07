@@ -43,7 +43,7 @@ const Blog = ({ blog, removeBlogState, loggedUser, increaseLike }) => {
           remove
         </button>
       </div>
-    </div>  
+    </div>
   )
 }
 

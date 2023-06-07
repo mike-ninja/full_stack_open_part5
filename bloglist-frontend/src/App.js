@@ -56,7 +56,7 @@ const App = () => {
     }
   }
 
-  const handleLogout = async (event) => {
+  const handleLogout = async () => {
     try {
       window.localStorage.removeItem(
         'loggedBlogAppUser'
@@ -98,8 +98,11 @@ const App = () => {
   const addBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
     const addedBlog = await blogService.create(blogObject)
-    console.log(addedBlog)
-    setBlogs(blogs.concat(addedBlog)) 
+    setSuccessMessage(`Added ${addedBlog.title} by ${addedBlog.author}`)
+    setTimeout(() => {
+      setSuccessMessage(null)
+    }, 3000)
+    setBlogs(blogs.concat(addedBlog))
   }
 
   const blogForm = () => (

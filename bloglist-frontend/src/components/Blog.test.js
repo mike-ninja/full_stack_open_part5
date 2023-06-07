@@ -40,7 +40,7 @@ describe('Blog test', () => {
       'How to cook'
     )
   })
-  
+
   test('At the start, the extra data is not display', () => {
     const div = container.querySelector('.extraData')
     expect(div).toHaveStyle('display: none')
