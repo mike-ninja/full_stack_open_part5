@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, updateState, loggedUser }) => {
+const Blog = ({ blog, removeBlogState, loggedUser, increaseLike }) => {
   const [view, setView] = useState(false)
-  const [likes, setLikes] = useState(blog.likes)
 
   const hideWhenVisible = { display: view ? 'none' : '' }
   const showWhenVisible = { display: view ? '' : 'none' }
@@ -13,24 +12,12 @@ const Blog = ({ blog, updateState, loggedUser }) => {
     setView(!view)
   }
 
-  const addLike = async () => {
-    const blogToUpdate = {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: likes + 1
-    }
-    const updatedBlog = await blogService
-      .update(blog.id, blogToUpdate)
-    setLikes(updatedBlog.likes)
-  }
-  
   const removeBlog = async () => {
     const result = window.confirm(`Removing blog ${blog.title} by ${blog.author}`)
     if (result) {
       await blogService
         .removeBlog(blog.id)
-      updateState(blog.id)
+      removeBlogState(blog.id)
     }
   }
 
@@ -45,11 +32,11 @@ const Blog = ({ blog, updateState, loggedUser }) => {
       <button style={showWhenVisible} onClick={toggleView}>
         hide
       </button>
-      <div style={showWhenVisible}>
+      <div className='extraData' style={showWhenVisible}>
         <p>{blog.url}</p>
         <div>
-          likes {likes}
-          <button onClick={addLike}>like</button>
+          likes {blog.likes}
+          <button onClick={() => increaseLike(blog)}>like</button>
         </div>
         <p>{user}</p>
         <button style={showRemoveButton} onClick={removeBlog}>
