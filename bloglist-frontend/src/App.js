@@ -5,6 +5,7 @@ import NotificationError from './components/NotificationError'
 import NotificationSuccess from './components/NotificationSuccess'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
+import LoginForm from './components/LoginForm'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -13,8 +14,6 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const blogFormRef = useRef()
 
@@ -33,7 +32,7 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async (event) => {
+  const handleLogin = async (username, password) => {
     event.preventDefault()
 
     try {
@@ -46,8 +45,6 @@ const App = () => {
       )
       blogService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
     } catch (exception) {
       setErrorMessage('Wrong Credentials')
       setTimeout(() => {
@@ -71,30 +68,6 @@ const App = () => {
     }
   }
 
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        username
-        <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        password
-        <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>
-  )
-
   const addBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
     const addedBlog = await blogService.create(blogObject)
@@ -117,7 +90,7 @@ const App = () => {
         <h2>Log in to the application</h2>
         <NotificationError message={errorMessage}/>
         <NotificationSuccess message={successMessage}/>
-        {loginForm()}
+        <LoginForm handleSubmit={handleLogin} />
       </div>
     )
   }
@@ -138,7 +111,7 @@ const App = () => {
     setBlogs(blogs.map(blog => blog.id !== updatedBlog.id ? blog : updatedBlog))
   }
 
-  const sortedArray = blogs.sort((a, b) => a.likes - b.likes)
+  const sortedArray = blogs.sort((a, b) => b.likes - a.likes)
 
   return (
     <div>
@@ -153,7 +126,13 @@ const App = () => {
       </div>
       {blogForm()}
       {sortedArray.map(blog =>
-        <Blog key={blog.id} blog={blog} removeBlogState={removeBlog} loggedUser={user} increaseLike={increaseLike}/>
+        <Blog
+          key={blog.id}
+          blog={blog}
+          removeBlogState={removeBlog}
+          loggedUser={user}
+          increaseLike={increaseLike}
+        />
       )}
     </div>
   )

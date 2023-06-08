@@ -6,7 +6,13 @@ const Blog = ({ blog, removeBlogState, loggedUser, increaseLike }) => {
 
   const hideWhenVisible = { display: view ? 'none' : '' }
   const showWhenVisible = { display: view ? '' : 'none' }
-  const showRemoveButton = { display: loggedUser.name === blog.user.name ? '' : 'none' }
+
+  let showRemoveButton
+  if (!blog.user) {
+    showRemoveButton = { display: 'none' }
+  } else {
+    showRemoveButton = { display: loggedUser.name === blog.user.name ? '' : 'none' }
+  }
 
   const toggleView = () => {
     setView(!view)
