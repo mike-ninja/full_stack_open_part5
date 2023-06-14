@@ -40,12 +40,12 @@ const Blog = ({ blog, removeBlogState, loggedUser, increaseLike }) => {
       </button>
       <div className='extraData' style={showWhenVisible}>
         <p>{blog.url}</p>
-        <div>
+        <div className='likes'>
           likes {blog.likes}
           <button className='likeButton' onClick={() => increaseLike(blog)}>like</button>
         </div>
         <p>{user}</p>
-        <button style={showRemoveButton} onClick={removeBlog}>
+        <button className='remove' style={showRemoveButton} onClick={removeBlog}>
           remove
         </button>
       </div>

@@ -38,9 +38,7 @@ describe('Blog App', () => {
   
   describe.only('When logged in', function() {
     beforeEach(function () {
-      cy.get('input#username').type('mike-wazowski')
-      cy.get('input#password').type('password')
-      cy.get('button#login-button').click()
+      cy.login('mike-wazowski', 'password')
     })
 
     it('A blog can be created', function() {
@@ -59,50 +57,50 @@ describe('Blog App', () => {
 
     describe('Where there are blogs rendered', function() {
       beforeEach(function() {
-        cy.contains('New Blog').click()
-        cy.get('input#title').type('How to get away with murder')
-        cy.get('input#author').type('Michel Kalinky')
-        cy.get('input#url').type('www.link.com')
-        cy.get('button#addBlog-button').click()
-
-        cy.contains('New Blog').click()
-        cy.get('input#title').type('How to get away with murder')
-        cy.get('input#title').type('How to get away with saving')
-        cy.get('input#author').type('Fred Wilson')
-        cy.get('input#url').type('www.link.com')
-        cy.get('button#addBlog-button').click()
-
-        cy.contains('New Blog').click()
-        cy.get('input#title').type('How to get away with murder')
-        cy.get('input#title').type('How to get away with fire')
-        cy.get('input#author').type('Lindon Berry')
-        cy.get('input#url').type('www.link.com')
-        cy.get('button#addBlog-button').click()
+        cy.createBlog({
+          "title": "How to get away with murder",
+          "author": "Micheal Cera",
+          "url": "www.website.com",
+          "likes": 6
+        })
+        cy.createBlog({
+          "title": "How to save someone",
+          "author": "Joyboy",
+          "url": "www.link.com",
+          "likes": 10
+        })
       })
 
       it('User can like a blog', function() {
-        cy.contains('.blog', 'How to get away with murder')
-          .siblings('.viewButton').click()
-          .siblings('.likeButton').click()
+        cy.get('.blog')
+          .eq(1)
+          .find('.viewButton')
+          .click()
+
+        cy.get('.blog')
+          .eq(1)
+          .find('.likeButton')
+          .click()
       })
 
       it('User can delete a blog', function() {
-        cy.contains('view').click()
-        cy.contains('remove').click()
+        cy.get('.blog')
+          .eq(1)
+          .find('.viewButton')
+          .click()
+
+        cy.get('.blog')
+          .eq(1)
+          .find('.remove')
+          .click()
       })
       
-      it('Checking the order of blogs', function() {
-        cy.contains('New Blog').click()
-        cy.get('input#title').type('How to get away with saving')
-        cy.get('input#author').type('Fred Wilson')
-        cy.get('input#url').type('www.link.com')
-        cy.get('button#addBlog-button').click()
-
-        // cy.contains('New Blog').click()
-        // cy.get('input#title').type('How to get away with vigilante')
-        // cy.get('input#author').type('Michel Kalinky')
-        // cy.get('input#url').type('www.link.com')
-        // cy.get('button#addBlog-button').click()
+      it.only('Checking the order of blogs', function() {
+        cy.contains('How to save someone').find('.viewButton').click()
+        cy.contains('How to get away with murder').find('.viewButton').click()
+        cy.get('.likes')
+          .should('contain', '10')
+          .should('not.contain', '7')
       })
     })
   })
